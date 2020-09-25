@@ -136,4 +136,34 @@ public class Digraph {
 		return reversePost;
 	}
 
+	private int[] scc;
+	private int count;
+
+	public void kosarajuSCC() {
+		marked = new boolean[vertices];
+		scc = new int[vertices];
+		Digraph r = reverse();
+		r.depthFirstOrder();
+		for (int i : r.reversePost()) {
+			if (!marked[i]) {
+				kosarajuSCC(i);
+				count++;
+			}
+		}
+	}
+
+	private void kosarajuSCC(int i) {
+		marked[i] = true;
+		scc[i] = count;
+		for (int j : adj(i)) {
+			if (!marked[j]) {
+				kosarajuSCC(j);
+			}
+		}
+	}
+
+	public boolean stronglyConnected(int i, int j) {
+		return scc[i] == scc[j];
+	}
+
 }
